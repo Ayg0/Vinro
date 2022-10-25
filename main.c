@@ -1,6 +1,6 @@
 #include "vinro.h"
 
-struct termios original;
+vinro_c	term;
 
 void	error_what(char *s)
 {
@@ -8,11 +8,17 @@ void	error_what(char *s)
 	exit(1);
 }
 
+void	get_window_size()
+{
+	if (ioctl(1, TIOCGWINSZ, &term.win)  == -1 || term.win.ws_col == 0)
+		error_what("window size");
+}
+
 void	enable_raw()
 {
 	struct termios	termi;
 
-	termi = original;
+	termi = term.original;
 	termi.c_iflag &= ~(IXON | ICRNL);
 	termi.c_oflag &= ~(OPOST);
 	termi.c_lflag &= ~ (ECHO | ICANON | ISIG | IEXTEN);
@@ -24,13 +30,29 @@ void	enable_raw()
 
 void	disable_raw()
 {
-	if (tcsetattr(1, TCSAFLUSH, &original) == -1)
+	write(1, "\033[2J\033[H\n", 7);
+	if (tcsetattr(1, TCSAFLUSH, &term.original) == -1)
 		error_what("tcsetattr");
+}
+
+void	draw_first_lines()
+{
+	int	i;
+
+	i = 0;
+	while (i < term.win.ws_col)
+	{
+		write(1, "~", 1);
+		(i != term.win.ws_col - 1) && write(1, "\r\n", 2);
+		i++;
+	}
+	write(1, "\033[H", 3);
 }
 
 void	refrech()
 {
-	write(1, "\033[2J\033[H", 4);
+	write(1, "\033[2J\033[H", 7);
+	draw_first_lines();
 }
 
 void	wait_until_key(char *c)
@@ -50,13 +72,18 @@ void	get_key_press()
 	wait_until_key(&c);
 	if (c == ctrl('q'))
 		exit (0);
-//	write(1, &c, 1);
+	write(1, &c, 1);
+}
+
+void	init_vinro()
+{
+	tcgetattr(1, &term.original);
+	get_window_size();
 }
 
 int	main()
 {
-
-	tcgetattr(1, &original);
+	init_vinro();
 	enable_raw();
 	atexit(disable_raw);
 	while (1)
