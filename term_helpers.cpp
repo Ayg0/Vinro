@@ -30,9 +30,11 @@ int	_term::edit_mode(){
 
 int	_term::print_line(size_t start){
 	size_t len = buff[start].length();
-	for (size_t i = 0; i < len; i++)
+	size_t i;
+	for (i = 0; i < len; i++)
 		waddch(stdscr, buff[start][i]);
-	waddch(stdscr, '\n');
+	if (buff[start][i - 1] != '\n')
+		waddch(stdscr, '\n');
 	return 0;
 }
 
@@ -56,9 +58,22 @@ int	_term::init_term(){
 
 int	_term::add(int key){
 	getyx(stdscr, curser.y, curser.x);
+	xy	tmp;
+
+	std::string	&s = buff[curser.y + scrolls];
 	if (isprint(key)){
-		buff[curser.y + scrolls].insert(curser.x, 1, key);
+		s.insert(curser.x, 1, key);
+		tmp.y = curser.y;
+		tmp.x = curser.x + 1;
+		if (tmp.x >= screen.x){
+			tmp.x = 0, tmp.y += 1;
+			buff.insert(buff.begin() + scrolls + tmp.y - 1, std::string(""));
+			if (tmp.y > screen.y)
+				tmp.y -= 1, scrolls += 1;
+		}
 		init_term();
+		wmove(stdscr, tmp.y, tmp.x);
+		wrefresh(stdscr);
 	}
 	return 0;
 }
@@ -75,7 +90,6 @@ int	_term::interactive_mode(int key){
 	else if (key == 127)
 		return (rm());
 	add(key);
-	init_term();
 	return 0;
 }
 
@@ -97,8 +111,8 @@ int _term::handle_moves(int key){
 	getyx(stdscr, curser.y, curser.x);
 	if (key == 'h' && (curser.x > 0))
 		wmove(stdscr, curser.y, curser.x - 1);
-	else if (key == 'l' && (curser.x + 1 < screen.x - 1) \
-		&& (buff[curser.y + scrolls].length() > curser.x))
+	else if (key == 'l' && (curser.x + 1 < screen.x) \
+		&& (buff[curser.y + scrolls].length() > (curser.x)))
 		wmove(stdscr, curser.y, curser.x + 1);
 	else if ((curser.y + i < screen.y) && (curser.y + i >= 0)){
 		int flag = 0, x = where_to_go(buff, curser.y, curser.x, i, flag);
