@@ -76,6 +76,28 @@ int	_term::add(int key){
 
 int	_term::rm(){
 	getyx(stdscr, curser.y, curser.x);
+	int flag = 0;
+	unsigned long len = 0;
+	if (curser.x == 0 && (scrolls + curser.y != 0)){
+		if (buff[curser.y + scrolls - 1].find('\n'))
+			buff[curser.y + scrolls - 1].pop_back();
+		len = buff[curser.y + scrolls - 1].length();
+		std::string tmp(buff[curser.y + scrolls - 1] + buff[curser.y + scrolls]);
+		if ((long)tmp.length() > screen.x){
+			buff[curser.y + scrolls - 1] = std::string(tmp.begin(), tmp.begin() + screen.x);
+			buff[curser.y + scrolls]= std::string(tmp.begin() + screen.x, tmp.end());
+		}
+		else{
+			buff[curser.y + scrolls - 1] = tmp;
+			buff.erase(buff.begin() + curser.y + scrolls);
+		}
+	}
+	else if (curser.x != 0){
+		buff[curser.y + scrolls].erase(buff[curser.y + scrolls].begin() + curser.x - 1);
+		flag = 1;
+	}
+	init_term();
+	wmove(stdscr, curser.y - 1 * (!flag), (curser.x - 1) * flag + len * !flag);
 	return 0;
 }
 
@@ -104,6 +126,18 @@ int	_term::interactive_mode(int key){
 		break;
 	case 10:
 		new_line();
+		break;
+	case KEY_UP:
+		handle_moves('k');
+		break;
+	case KEY_DOWN:
+		handle_moves('j');
+		break;
+	case KEY_LEFT:
+		handle_moves('h');
+		break;
+	case KEY_RIGHT:
+		handle_moves('l');
 		break;
 	default:
 		if (isprint(key))

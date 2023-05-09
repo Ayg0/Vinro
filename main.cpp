@@ -5,6 +5,7 @@ int	init_ncurses(){
 	noecho();
 	cbreak();
 	nodelay(stdscr, TRUE);
+	keypad(stdscr, true);
 	return 0;
 }
 
