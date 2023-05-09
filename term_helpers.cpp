@@ -16,8 +16,6 @@ xy			_term::get_sreen() const{
 	return (screen);
 }
 
-
-
 int	_term::raw_mode(){
 	flags &= ~EDIT_MASK;
 	return 0;
@@ -41,7 +39,7 @@ int	_term::print_line(size_t start){
 int	_term::init_term(){
 	size_t	w = scrolls;
 	wmove(stdscr, 0, 0);
-	for (size_t i = 0; i < screen.y; i++){
+	for (int i = 0; i < screen.y; i++){
 		if (w < buff.size()){
 			print_line(w);
 			w++;
@@ -61,20 +59,18 @@ int	_term::add(int key){
 	xy	tmp;
 
 	std::string	&s = buff[curser.y + scrolls];
-	if (isprint(key)){
-		s.insert(curser.x, 1, key);
-		tmp.y = curser.y;
-		tmp.x = curser.x + 1;
-		if (tmp.x >= screen.x){
-			tmp.x = 0, tmp.y += 1;
-			buff.insert(buff.begin() + scrolls + tmp.y - 1, std::string(""));
-			if (tmp.y > screen.y)
-				tmp.y -= 1, scrolls += 1;
-		}
-		init_term();
-		wmove(stdscr, tmp.y, tmp.x);
-		wrefresh(stdscr);
+	s.insert(curser.x, 1, key);
+	tmp.y = curser.y;
+	tmp.x = curser.x + 1;
+	if (tmp.x >= screen.x){
+		tmp.x = 0, tmp.y += 1;
+		buff.insert(buff.begin() + scrolls + tmp.y - 1, std::string(""));
+		if (tmp.y > screen.y)
+			tmp.y -= 1, scrolls += 1;
 	}
+	init_term();
+	wmove(stdscr, tmp.y, tmp.x);
+	wrefresh(stdscr);
 	return 0;
 }
 
@@ -83,45 +79,58 @@ int	_term::rm(){
 	return 0;
 }
 
-
-int	_term::interactive_mode(int key){
-	if (key == 27)
-		return (raw_mode());
-	else if (key == 127)
-		return (rm());
-	add(key);
+int	_term::new_line(){
+	getyx(stdscr, curser.y, curser.x);
+	char	flag = 0;
+	buff.insert(buff.begin() + scrolls + curser.y + 1, std::string("\n"));
+	if (curser.y == screen.y - 1)
+		scrolls++, flag = 1;
+	init_term();
+	wmove(stdscr, curser.y + 1 * !flag, 0);
 	return 0;
 }
 
-int	_term::where_to_go(std::vector<std::string> &buff, int y, int x, int to_go, int &flag){
-	if (y + scrolls + to_go > buff.size()){
-		buff.push_back(" ");
-		flag = 1;
-		return 0;
+int	_term::interactive_mode(int key){
+	switch (key)
+	{
+	case 27:
+		raw_mode();
+		break;
+	case 127:
+		rm();
+		break;
+	case 10:
+		new_line();
+		break;
+	default:
+		if (isprint(key))
+			add(key);
+		break;
 	}
-	else if (x > buff[y + scrolls + to_go].length()){
-		return (buff[y + scrolls + to_go].length() - 1);
-	}
-	else
-		return (x);
+	return 0;
 }
 
 int _term::handle_moves(int key){
-	int	i = 1 * (key == 'j') + -1 * (key == 'k');
 	getyx(stdscr, curser.y, curser.x);
 	if (key == 'h' && (curser.x > 0))
 		wmove(stdscr, curser.y, curser.x - 1);
 	else if (key == 'l' && (curser.x + 1 < screen.x) \
-		&& (buff[curser.y + scrolls].length() > (curser.x)))
+		&& ((int)(buff[curser.y + scrolls].length() - 1) > (curser.x)))
 		wmove(stdscr, curser.y, curser.x + 1);
-	else if ((curser.y + i < screen.y) && (curser.y + i >= 0)){
-		int flag = 0, x = where_to_go(buff, curser.y, curser.x, i, flag);
-		if (flag)
-			init_term();
-		wmove(stdscr,curser.y + i, x);
+	else if (key == 'j'){
+		if ((curser.y + scrolls) < (long)buff.size() - 1){
+			if (curser.y + 1 < screen.y )
+				wmove(stdscr, curser.y + 1, 0);
+			else
+				scrolls++, init_term(), wmove(stdscr, curser.y, 0);
+		}
 	}
-	else
-		scrolls += i * ((scrolls + i) >= 0);
+	else if (key == 'k'){
+		if (curser.y - 1 >= 0)
+			wmove(stdscr, curser.y - 1, 0);
+		else if (scrolls > 0)
+			scrolls--, init_term(), wmove(stdscr, curser.y, 0);
+	}
 	return (0);
 }
 
@@ -133,7 +142,7 @@ int	_term::view_mode(int key, _file_D &f){
 		break;
 	case 'w':
 		f.write_file(*this);
-		exit(0);
+		ft_exit();
 		break;
 	default:
 		if (strchr("hjkl", key))

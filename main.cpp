@@ -21,8 +21,6 @@ int	main(int ac, char **av){
 	win.init_vars();
 	file.read_file(win);
 	win.init_term();
-
-	//file.write_file(win);
 	while (1){
 		if ((key = getch()) == ERR)
 			continue;

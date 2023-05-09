@@ -6,20 +6,21 @@
 # include <termios.h>
 # include <string.h>
 # include <fstream>
-#include <cstdlib>
+# include <cstdlib>
 # include <vector>
+# include <unistd.h>
 
 # define EDIT_MASK 2
 
 typedef	struct _xy{
-	size_t	x;
-	size_t	y;
+	int	x;
+	int	y;
 } xy;
 
 class _term{
 public:
 	int			flags;
-	size_t		scrolls;
+	long		scrolls;
 	xy			screen;
 	xy			curser;
 	std::vector<std::string> buff;
@@ -28,10 +29,11 @@ public:
 	int	init_term();
 	int	raw_mode();
 	int	edit_mode();
-	int	add(int key);
 	int	view_mode(int key, class _file_D &f);
 	int	interactive_mode(int key);
+	int	add(int key);
 	int	rm();
+	int	new_line();
 	int handle_moves(int key);
 	int	where_to_go(std::vector<std::string> &buff, int y, int x, int to_go, int &flag);
 	std::vector<std::string>	&g_buff();
@@ -48,5 +50,7 @@ public:
 	int	read_file(_term &Inf);
 	int	write_file(_term &Inf);
 };
+
+void	ft_exit();
 
 #endif
