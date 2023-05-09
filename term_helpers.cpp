@@ -185,6 +185,9 @@ int	_term::view_mode(int key, _file_D &f){
 		f.write_file(*this);
 		ft_exit();
 		break;
+	case 'q':
+		ft_exit();
+		break;
 	default:
 		if (strchr("hjkl", key))
 			handle_moves(key);
