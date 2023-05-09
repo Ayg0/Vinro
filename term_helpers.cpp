@@ -82,7 +82,10 @@ int	_term::rm(){
 int	_term::new_line(){
 	getyx(stdscr, curser.y, curser.x);
 	char	flag = 0;
-	buff.insert(buff.begin() + scrolls + curser.y + 1, std::string("\n"));
+	std::string &s = buff[curser.y + scrolls];
+	std::string tmp(s.begin() + curser.x, s.end());
+	s = std::string(s.begin(), s.begin() + curser.x) + "\n";
+	buff.insert(buff.begin() + scrolls + curser.y + 1, tmp);
 	if (curser.y == screen.y - 1)
 		scrolls++, flag = 1;
 	init_term();
