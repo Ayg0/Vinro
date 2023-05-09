@@ -121,7 +121,7 @@ int	_term::interactive_mode(int key){
 	case 27:
 		raw_mode();
 		break;
-	case 127:
+	case KEY_BACKSPACE:
 		rm();
 		break;
 	case 10:
@@ -138,6 +138,10 @@ int	_term::interactive_mode(int key){
 		break;
 	case KEY_RIGHT:
 		handle_moves('l');
+		break;
+	case '\t':
+		for (int i = 0; i < TAB_SIZE; i++)
+			add(' '), refresh();
 		break;
 	default:
 		if (isprint(key))

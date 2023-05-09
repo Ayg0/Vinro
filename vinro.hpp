@@ -11,6 +11,7 @@
 # include <unistd.h>
 
 # define EDIT_MASK 2
+# define TAB_SIZE 2
 
 typedef	struct _xy{
 	int	x;
