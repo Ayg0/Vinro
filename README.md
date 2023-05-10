@@ -14,6 +14,7 @@ The VI clone that no sane person will use (for now);
   * save the file using 'w';
   * go to the beginning of the line using 'b' and to the end of it using 'e';
   * quit using 'q';
+  * delete line using 'd';
   * enter a multi-char/string command using 'ENTER':
     * 'ENTER' + "wq" + 'ENTER' : will save the file and exit vinro.
 ---
