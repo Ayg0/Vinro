@@ -13,6 +13,7 @@ The VI clone that no sane person will use (for now);
 * VIEW MODE:
   * save the file using 'w';
   * quit using 'q';
+  * delete line using 'd';
   * enter a multi-char/string command using 'ENTER':
     * 'ENTER' + "wq" + 'ENTER' : will save the file and exit vinro.
 ---
