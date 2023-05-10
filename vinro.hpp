@@ -31,21 +31,24 @@ public:
 	xy			screen;
 	xy			curser;
 	std::vector<std::string> buff;
-
-	int	init_vars();
-	int	init_term();
-	int	raw_mode();
-	int	edit_mode();
-	int	view_mode(int key, class _file_D &f);
+	// general:
+	int							init_vars();
+	int							init_term();
+	int							raw_mode();
+	int							edit_mode();
+	int							view_mode(int key, class _file_D &f);
+	int							print_line(size_t start);
+	std::vector<std::string>	&g_buff();
+	xy							get_sreen() const;
+	// interactive_mode:
 	int	interactive_mode(int key);
 	int	add(int key);
 	int	rm();
 	int	new_line();
+	// view_mode:
 	int handle_moves(int key);
-	int	where_to_go(std::vector<std::string> &buff, int y, int x, int to_go, int &flag);
-	std::vector<std::string>	&g_buff();
-	xy			get_sreen() const;
-	int	print_line(size_t start);
+	int string_command(_file_D &f);
+	int ft_erase();
 };
 
 class _file_D{

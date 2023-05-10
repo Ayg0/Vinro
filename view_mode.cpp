@@ -24,6 +24,37 @@ int _term::handle_moves(int key){
 	return (0);
 }
 
+int	_term::ft_erase(){
+	xy tmp;
+
+	getyx(stdscr, tmp.y, tmp.x);
+	buff.erase(buff.begin() + tmp.y + scrolls);
+	if (tmp.y != 0)
+		tmp.y--;
+	if (!buff.size())
+		buff.push_back("\n");
+	init_term();
+	wmove(stdscr, tmp.y, tmp.x);
+	return (0);
+}
+
+int	_term::string_command(_file_D &f){
+	std::string cmd;
+	int	key = 0, index = 0;
+	while (key != '\n'){
+		if ((key = getch()) == ERR)
+			continue;
+		else if (isprint(key))
+			cmd.insert(index++, 1, key);
+	}
+	if (cmd == "wq"){
+		f.write_file(*this);
+		ft_exit();
+	}
+	return (0);
+}
+
+
 int	_term::view_mode(int key, _file_D &f){
 	switch (key)
 	{
@@ -32,11 +63,15 @@ int	_term::view_mode(int key, _file_D &f){
 		break;
 	case 'w':
 		f.write_file(*this);
-		ft_exit();
 		break;
 	case 'q':
 		ft_exit();
 		break;
+	case 'd':
+		ft_erase();
+		break;
+	case '\n':
+		string_command(f);
 	default:
 		if (strchr("hjkl", key))
 			handle_moves(key);
