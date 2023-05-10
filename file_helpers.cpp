@@ -2,7 +2,7 @@
 
 int	_file_D::write_file(_term &Inf){
 	std::ofstream ouf(file_name);
-	std::vector<std::string> &buff = Inf.g_buff();
+	std::vector<std::string> &buff = Inf.buff;
 	size_t	w = 0, len = buff.size();
 	while (w < len)
 		ouf << buff[w++];
@@ -12,9 +12,9 @@ int	_file_D::write_file(_term &Inf){
 
 int	_file_D::read_file(_term &Inf){
 	std::ifstream inf(file_name);
-	size_t	len = Inf.get_sreen().x;
+	size_t	len = Inf.screen.x;
 	std::string	tmp;
-	std::vector<std::string> &buff = Inf.g_buff();
+	std::vector<std::string> &buff = Inf.buff;
 
 	if (!inf.is_open()){
 		buff.push_back("\n");

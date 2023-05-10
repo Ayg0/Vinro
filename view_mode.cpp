@@ -41,12 +41,19 @@ int	_term::ft_erase(){
 int	_term::string_command(_file_D &f){
 	std::string cmd;
 	int	key = 0, index = 0;
+	xy	tmp;
+	getyx(stdscr, tmp.y, tmp.x);
+	wmove(stdscr, screen.y - 2, 0);
 	while (key != '\n'){
 		if ((key = getch()) == ERR)
 			continue;
-		else if (isprint(key))
+		else if (isprint(key)){
 			cmd.insert(index++, 1, key);
+			waddch(stdscr, key);
+		}
 	}
+	init_term();
+	wmove(stdscr, tmp.y, tmp.x);
 	if (cmd == "wq"){
 		f.write_file( *this );
 		ft_exit();
@@ -56,6 +63,7 @@ int	_term::string_command(_file_D &f){
 
 
 int	_term::view_mode(int key, _file_D &f){
+	getyx(stdscr, curser.y, curser.x);
 	switch (key)
 	{
 	case 'i':
@@ -72,6 +80,13 @@ int	_term::view_mode(int key, _file_D &f){
 		break;
 	case '\n':
 		string_command(f);
+		break;
+	case 'b':
+		wmove(stdscr, curser.y, 0);
+		break;
+	case 'e':
+		wmove(stdscr, curser.y, buff[curser.y + scrolls].length() - 1);
+		break;
 	default:
 		if (strchr("hjkl", key))
 			handle_moves(key);

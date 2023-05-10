@@ -38,8 +38,6 @@ public:
 	int							edit_mode();
 	int							view_mode(int key, class _file_D &f);
 	int							print_line(size_t start);
-	std::vector<std::string>	&g_buff();
-	xy							get_sreen() const;
 	// interactive_mode:
 	int	interactive_mode(int key);
 	int	add(int key);

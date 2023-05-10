@@ -8,14 +8,6 @@ int	_term::init_vars(){
 	return 0;
 }
 
-std::vector<std::string>	&_term::g_buff(){
-	return (buff);
-}
-
-xy			_term::get_sreen() const{
-	return (screen);
-}
-
 int	_term::raw_mode(){
 	flags &= ~EDIT_MASK;
 	return 0;

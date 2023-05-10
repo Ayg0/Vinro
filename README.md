@@ -12,6 +12,7 @@ The VI clone that no sane person will use (for now);
 
 * VIEW MODE:
   * save the file using 'w';
+  * go to the beginning of the line using 'b' and to the end of it using 'e';
   * quit using 'q';
   * enter a multi-char/string command using 'ENTER':
     * 'ENTER' + "wq" + 'ENTER' : will save the file and exit vinro.
