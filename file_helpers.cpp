@@ -21,8 +21,8 @@ int	_file_D::read_file(_term &Inf){
 		return 1;
 	}
 	while (getline(inf, tmp)){
-		if (tmp.length() > len){
-			buff.push_back(std::string(tmp.begin(), tmp.begin() + len));
+		if (tmp.length() > len - 1){
+			buff.push_back(std::string(tmp.begin(), tmp.begin() + len - 1));
 			buff.push_back(std::string(tmp.begin() + len, tmp.end()) + "\n");
 		}
 		else

@@ -1,22 +1,20 @@
 #include "vinro.hpp"
 
 int	_term::add(int key){
-	getyx(stdscr, curser.y, curser.x);
 	xy	tmp;
+	getyx(stdscr, tmp.y, tmp.x);
 
-	std::string	&s = buff[curser.y + scrolls];
-	s.insert(curser.x, 1, key);
-	tmp.y = curser.y;
-	tmp.x = curser.x + 1;
-	if (tmp.x >= screen.x){
+	std::string	&s = buff[tmp.y + scrolls];
+	s.insert(tmp.x++, 1, key);
+	if (tmp.x > screen.x - 2){
 		tmp.x = 0, tmp.y += 1;
-		buff.insert(buff.begin() + scrolls + tmp.y - 1, std::string("\n"));
+		buff.insert(buff.begin() + scrolls + tmp.y, std::string(""));
 		if (tmp.y > screen.y)
 			tmp.y -= 1, scrolls += 1;
 	}
 	init_term();
 	wmove(stdscr, tmp.y, tmp.x);
-	wrefresh(stdscr);
+	refresh();
 	return 0;
 }
 
@@ -25,6 +23,8 @@ int	_term::rm(){
 	size_t	len = 0;
 
 	getyx(stdscr, posi.y, posi.x);
+	if (!(posi.x + scrolls + posi.y))
+		return (1);
 	if (posi.x == 0 && (scrolls + posi.y > 0)){
 		if (buff[posi.y + scrolls - 1] == "\n")
 			buff[posi.y + scrolls - 1] = "";
@@ -33,7 +33,7 @@ int	_term::rm(){
 		len = buff[posi.y + scrolls - 1].length();
 		std::string tmp(buff[posi.y + scrolls - 1] + buff[posi.y + scrolls]);
 		if ((long)tmp.length() > screen.x){
-			buff[posi.y + scrolls - 1] = std::string(tmp.begin(), tmp.begin() + screen.x - 1);
+			buff[posi.y + scrolls - 1] = std::string(tmp.begin(), tmp.begin() + screen.x);
 			buff[posi.y + scrolls]= std::string(tmp.begin() + screen.x, tmp.end());
 			posi.x = screen.x - 1;
 		}
@@ -48,7 +48,6 @@ int	_term::rm(){
 		buff[posi.y + scrolls].erase(buff[posi.y + scrolls].begin() + posi.x - 1);
 		posi.x--;
 	}
-	//HERE:
 	init_term();
 	wmove(stdscr, posi.y, posi.x);
 	refresh();

@@ -29,12 +29,12 @@ int	_term::ft_erase(){
 
 	getyx(stdscr, tmp.y, tmp.x);
 	buff.erase(buff.begin() + tmp.y + scrolls);
-	if (tmp.y != 0)
+	if (tmp.y > 0)
 		tmp.y--;
 	if (!buff.size())
 		buff.push_back("\n");
 	init_term();
-	wmove(stdscr, tmp.y, tmp.x);
+	wmove(stdscr, tmp.y, 0);
 	return (0);
 }
 
@@ -43,7 +43,7 @@ int	_term::string_command(_file_D &f){
 	int	key = 0, index = 0;
 	xy	tmp;
 	getyx(stdscr, tmp.y, tmp.x);
-	wmove(stdscr, screen.y - 2, 0);
+	wmove(stdscr, screen.y - 1, 0);
 	while (key != '\n'){
 		if ((key = getch()) == ERR)
 			continue;
@@ -53,6 +53,7 @@ int	_term::string_command(_file_D &f){
 		}
 	}
 	init_term();
+	refresh();
 	wmove(stdscr, tmp.y, tmp.x);
 	if (cmd == "wq"){
 		f.write_file( *this );
