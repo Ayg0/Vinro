@@ -10,6 +10,12 @@
 # include <vector>
 # include <unistd.h>
 
+# if __APPLE__
+	# define BACKSPACE 127
+# else
+	# define BACKSPACE KEY_BACKSPACE
+# endif
+
 # define EDIT_MASK 2
 # define TAB_SIZE 2
 

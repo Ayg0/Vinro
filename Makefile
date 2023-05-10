@@ -4,7 +4,8 @@ CC = c++
 
 CPPFLAGS = -Wall -Werror -Wextra -fsanitize=address -g
 
-SRC = main.cpp term_helpers.cpp file_helpers.cpp general.cpp
+SRC = main.cpp term_helpers.cpp file_helpers.cpp general.cpp \
+		interactive_mode.cpp view_mode.cpp
 
 OBJ = ${SRC:.cpp=.o} 
 
