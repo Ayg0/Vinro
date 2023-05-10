@@ -5,9 +5,16 @@ The VI clone that no sane person will use (for now);
 ---
 **Usage:**
 ---
-* When you start Vinro, you will be in interactive mode, where you can move around using the arrow keys and edit the file. Pressing the "ESC" key will put you into view mode.
+* Interactive mode:
+  * move using arrow keys
+  * edit and manipulate the file
+  * turn into view mode using 'ESC'
 
-* In view mode, you can save and quit by pressing "w", quit without saving by pressing "q", or return to interactive mode by pressing "i".
+* VIEW MODE:
+  * save the file using 'w';
+  * quit using 'q';
+  * enter a multi-char/string command using 'ENTER':
+    * 'ENTER' + "wq" + 'ENTER' : will save the file and exit vinro.
 ---
 **Installation GUIDE:**
 ---
