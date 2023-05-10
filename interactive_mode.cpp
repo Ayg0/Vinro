@@ -10,7 +10,7 @@ int	_term::add(int key){
 	tmp.x = curser.x + 1;
 	if (tmp.x >= screen.x){
 		tmp.x = 0, tmp.y += 1;
-		buff.insert(buff.begin() + scrolls + tmp.y - 1, std::string(""));
+		buff.insert(buff.begin() + scrolls + tmp.y - 1, std::string("\n"));
 		if (tmp.y > screen.y)
 			tmp.y -= 1, scrolls += 1;
 	}
@@ -21,29 +21,37 @@ int	_term::add(int key){
 }
 
 int	_term::rm(){
-	getyx(stdscr, curser.y, curser.x);
-	int flag = 0;
-	unsigned long len = 0;
-	if (curser.x == 0 && (scrolls + curser.y != 0)){
-		if (buff[curser.y + scrolls - 1].find('\n'))
-			buff[curser.y + scrolls - 1].pop_back();
-		len = buff[curser.y + scrolls - 1].length();
-		std::string tmp(buff[curser.y + scrolls - 1] + buff[curser.y + scrolls]);
+	xy		posi;
+	size_t	len = 0;
+
+	getyx(stdscr, posi.y, posi.x);
+	if (posi.x == 0 && (scrolls + posi.y > 0)){
+		if (buff[posi.y + scrolls - 1] == "\n")
+			buff[posi.y + scrolls - 1] = "";
+		else if (buff[posi.y + scrolls - 1].find('\n'))
+			buff[posi.y + scrolls - 1].pop_back();
+		len = buff[posi.y + scrolls - 1].length();
+		std::string tmp(buff[posi.y + scrolls - 1] + buff[posi.y + scrolls]);
 		if ((long)tmp.length() > screen.x){
-			buff[curser.y + scrolls - 1] = std::string(tmp.begin(), tmp.begin() + screen.x);
-			buff[curser.y + scrolls]= std::string(tmp.begin() + screen.x, tmp.end());
+			buff[posi.y + scrolls - 1] = std::string(tmp.begin(), tmp.begin() + screen.x - 1);
+			buff[posi.y + scrolls]= std::string(tmp.begin() + screen.x, tmp.end());
+			posi.x = screen.x - 1;
 		}
 		else{
-			buff[curser.y + scrolls - 1] = tmp;
-			buff.erase(buff.begin() + curser.y + scrolls);
+			buff[posi.y + scrolls - 1] = tmp;
+			buff.erase(buff.begin() + posi.y + scrolls);
+			posi.x = len - (len > 0);
 		}
+		posi.y--;
 	}
-	else if (curser.x != 0){
-		buff[curser.y + scrolls].erase(buff[curser.y + scrolls].begin() + curser.x - 1);
-		flag = 1;
+	else if (posi.x != 0){
+		buff[posi.y + scrolls].erase(buff[posi.y + scrolls].begin() + posi.x - 1);
+		posi.x--;
 	}
+	//HERE:
 	init_term();
-	wmove(stdscr, curser.y - 1 * (!flag), (curser.x - 1) * flag + len * !flag);
+	wmove(stdscr, posi.y, posi.x);
+	refresh();
 	return 0;
 }
 

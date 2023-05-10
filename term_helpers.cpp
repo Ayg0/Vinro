@@ -39,18 +39,14 @@ int	_term::print_line(size_t start){
 int	_term::init_term(){
 	size_t	w = scrolls;
 	wmove(stdscr, 0, 0);
-	for (int i = 0; i < screen.y; i++){
-		if (w < buff.size()){
-			print_line(w);
-			w++;
-		}
-		else{
-			waddch(stdscr, '~');
-			waddch(stdscr, '\n');
-		}
+	for (int i = 0; i < (screen.y - 1); i++){
+		if (w < buff.size())
+			print_line(w++);
+		else
+			printw("~\n");
 	}
 	wmove(stdscr, 0, 0);
-	wrefresh(stdscr);
+	refresh();
 	return 2;
 }
 
