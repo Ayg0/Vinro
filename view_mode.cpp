@@ -48,7 +48,7 @@ int	_term::string_command(_file_D &f){
 			cmd.insert(index++, 1, key);
 	}
 	if (cmd == "wq"){
-		f.write_file(*this);
+		f.write_file( *this );
 		ft_exit();
 	}
 	return (0);
