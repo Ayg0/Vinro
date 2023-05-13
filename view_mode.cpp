@@ -62,6 +62,24 @@ int	_term::string_command(_file_D &f){
 	return (0);
 }
 
+int	_term::undo(){
+	//actions a;
+
+	//if (!bu_stack.size())
+	//	return (1);
+	//a = bu_stack.top(), bu_stack.pop();
+	//if (a.line.empty())
+	//	wmove(stdscr, a.posi.y, a.posi.x);
+	//if (a.action == 'a')
+	//	rm();
+	//else if (a.action == 'r')
+	//	add(a.key);
+	return (0);
+}
+
+int	_term::redo(){
+	return (1);	
+}
 
 int	_term::view_mode(int key, _file_D &f){
 	getyx(stdscr, curser.y, curser.x);
@@ -87,6 +105,12 @@ int	_term::view_mode(int key, _file_D &f){
 		break;
 	case 'e':
 		wmove(stdscr, curser.y, buff[curser.y + scrolls].length() - 1);
+		break;
+	case 'u':
+		undo();
+		break;
+	case 'r':
+		redo();
 		break;
 	default:
 		if (strchr("hjkl", key))

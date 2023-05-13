@@ -21,8 +21,8 @@ int	_term::add(int key){
 int	_term::rm(){
 	xy		posi;
 	size_t	len = 0;
-
 	getyx(stdscr, posi.y, posi.x);
+
 	if (!(posi.x + scrolls + posi.y))
 		return (1);
 	if (posi.x == 0 && (scrolls + posi.y > 0)){
@@ -57,6 +57,7 @@ int	_term::rm(){
 int	_term::new_line(){
 	getyx(stdscr, curser.y, curser.x);
 	char	flag = 0;
+
 	std::string &s = buff[curser.y + scrolls];
 	std::string tmp(s.begin() + curser.x, s.end());
 	s = std::string(s.begin(), s.begin() + curser.x) + "\n";

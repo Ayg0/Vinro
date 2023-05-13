@@ -20,9 +20,17 @@
 # define TAB_SIZE 2
 
 typedef	struct _xy{
-	int	x;
-	int	y;
+	long long	x;
+	long long	y;
 } xy;
+
+typedef	struct _action{
+	char		action;
+	std::string	line;
+	xy			posi;
+	int			key;
+	long long	scrolls;
+} actions;
 
 class _term{
 public:
@@ -30,7 +38,8 @@ public:
 	long		scrolls;
 	xy			screen;
 	xy			curser;
-	std::vector<std::string> buff;
+	std::vector<std::string>	buff;
+	//std::stack<actions>			bu_stack; undo and redo can wait untill re-framing the idea
 	// general:
 	int							init_vars();
 	int							init_term();
@@ -47,6 +56,10 @@ public:
 	int handle_moves(int key);
 	int string_command(_file_D &f);
 	int ft_erase();
+	int undo();
+	int redo();
+	// helpers
+	//int	new_stack_frame(char action, int key, xy posi);
 };
 
 class _file_D{

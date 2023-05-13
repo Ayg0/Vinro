@@ -18,6 +18,19 @@ int	_term::edit_mode(){
 	return 0;
 }
 
+//int	_term::new_stack_frame(char action, int key, xy posi){
+//	actions a;
+
+//	a.action  = action;
+//	a.scrolls = scrolls;
+//	a.posi	  = posi;
+//	a.key	  = key;
+//	if (action == 'd')
+//		a.line = buff[curser.y + scrolls];
+//	bu_stack.push(a);
+//	return 0;
+//}
+
 int	_term::print_line(size_t start){
 	size_t len = buff[start].length();
 	size_t i;
