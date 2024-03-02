@@ -1,22 +1,26 @@
-name = vinro
+NAME = vinro
 
-CC = c++
+CC = gcc 
 
-CPPFLAGS = -Wall -Werror -Wextra -fsanitize=address -g
+CFLAGS= -Werror -Wall -Wextra -g -lcurses
 
-SRC = main.cpp term_helpers.cpp file_helpers.cpp general.cpp \
-		interactive_mode.cpp view_mode.cpp
+SRCS = main.c outputHelper.c inputHelper.c
 
-OBJ = ${SRC:.cpp=.o} 
+OBJS = ${SRCS:.c=.o}
 
-all: $(name)
+RM = rm -f
 
-$(name): $(OBJ)
-		$(CC) $(CPPFLAGS) -lncurses $(OBJ) -o $(name)
+all: $(NAME)
+
+$(NAME):	$(OBJS)
+		$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
 
 clean:
-		rm -rf $(OBJ)
+		$(RM) $(OBJS)
+
 fclean: clean
-		rm -rf $(name)
-re:		fclean all
+		$(RM) $(NAME)
+
+re: fclean all
+
 .PHONY: all clean fclean re
