@@ -6,7 +6,7 @@
       "request": "launch",
       "name": "Launch",
       "program": "${workspaceFolder}/vinro",
-      "args": [],
+      "args": ["a"],
       "cwd": "${workspaceFolder}"
     },
     {
