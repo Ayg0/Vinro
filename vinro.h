@@ -28,6 +28,7 @@ typedef struct _position{
 
 typedef struct _line{
 	uint32_t	size;
+	uint8_t		hadNewLine;
 	int8_t		*line;
 } lineData;
 

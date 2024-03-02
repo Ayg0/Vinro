@@ -9,20 +9,28 @@ vinroData	data;
 buffer		textBuffer;
 FILE		*file;
 
+uint32_t mystrlen(char *line, uint8_t *hadNewLine){
+	uint32_t i = 0;
+
+	while (line[i]) {
+		if (line[i] == '\r' || line[i] == '\n')
+			*hadNewLine = 1;
+	}
+	return i;
+}
 
 void loadData(char *fileName){
 	char line[data.maxWidth];
+	uint8_t hadNewLine = 0;
 
 	file = fopen(fileName, "a+");
 	if (!file)
 		displayError("File \?\?!");
-	//appendRow("Hello World", 12, 0);
-	//appendRow("Hello guys!", 12, 1);
-	//appendRow("Hello guys!", 12, 2);
 	rewind(file);
 	int i = 0;
 	while (fgets(line, sizeof(line), file) != NULL) {
-        appendRow(line, strlen(line), i);
+        appendRow(line, mystrlen(line, &hadNewLine), i);
+		textBuffer.lines[i].hadNewLine = hadNewLine;
 		i++;
     }
 }
