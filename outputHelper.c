@@ -68,11 +68,9 @@ uint8_t 	copyline(lineData *to, char const *from, uint32_t len, uint8_t hadNewLi
 
 uint8_t appendRow(char *line, uint32_t lineSize, uint32_t atRow, uint8_t hadNewLine){
 	lineData *linePtr = NULL;
-	if (atRow >= textBuffer.nbRows)
-		linePtr = addRows(atRow);
-	else
-		linePtr = getRow(atRow);
-	linePtr->line = calloc(lineSize + 1, sizeof(char));
+	
+	linePtr = addRows(atRow);
+	linePtr->line = calloc(data.maxWidth, sizeof(char));
 	if (!linePtr->line)
 		displayError("Allocation Failed");
 	linePtr->size = lineSize;

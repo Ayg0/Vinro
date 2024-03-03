@@ -15,16 +15,18 @@ enum MODS{
 	CONTROL_MODE,
 };
 
-typedef struct _vinroData{
-    uint32_t	maxWidth;
-    uint32_t	maxHeight;
-    uint8_t		mode;
-} vinroData;
-
 typedef struct _position{
 	uint32_t x;
 	uint32_t y;
 } position;
+
+typedef struct _vinroData{
+    uint32_t	maxWidth;
+    uint32_t	maxHeight;
+    uint8_t		mode;
+	position	cursorPos;
+} vinroData;
+
 
 typedef struct _line{
 	uint32_t		size;
@@ -38,18 +40,27 @@ typedef struct _buffer {
     lineData	*lines;
 	uint32_t	usedRows;
 	uint32_t	nbRows;
-	position	cursorPos;
 	lineData	*end;
 } buffer;
+
+#define KEY_ESC 27
 
 void 	displayError(char *err);
 uint8_t appendRow(char *line, uint32_t lineSize, uint32_t atRow, uint8_t hadNewLine);
 void 	loadData(char *fileName);
 void 	saveData(char *filePath);
+void	handleEditInput(int c);
+void	handleControlInput(int c);
 
+lineData *getRow(uint32_t index);
 
-extern FILE *file;
-extern vinroData data;
-extern buffer textBuffer;
-extern uint8_t _DONT_IGNORE;
+// line Manipulation:
+void	insertCharacter(int c);
+void	deleteCharacter();
+
+extern FILE			*file;
+extern vinroData	data;
+extern buffer 		textBuffer;
+extern uint8_t 		_DONT_IGNORE;
+extern uint8_t		_CLOSE_WINDOW;
 #endif

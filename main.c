@@ -13,8 +13,6 @@ FILE		*file;
 void initTextBuffer(){
 	textBuffer.nbRows = 0;
 	textBuffer.usedRows = 0;
-	textBuffer.cursorPos.x = 0;
-	textBuffer.cursorPos.y = 0;
 	textBuffer.lines = NULL;
 	textBuffer.end = NULL;
 }
@@ -25,6 +23,9 @@ void initVinro(){
     raw();
     keypad(stdscr, TRUE);
 	noecho();
+	data.cursorPos.y = 0;
+	data.cursorPos.x = 0;
+	data.mode = CONTROL_MODE;
     getmaxyx(stdscr, data.maxHeight, data.maxWidth);
 }
 
@@ -42,6 +43,7 @@ void displayError(char *err){
 char outputBuffer(){
     uint32_t i = 0;
 	lineData *tmp = textBuffer.lines;
+	move(0, 0);
     while (i < data.maxHeight) {
 		if (i < textBuffer.usedRows){
 			printw("%s%c", tmp->line, !tmp->hadNewLine * '\n');
@@ -51,13 +53,20 @@ char outputBuffer(){
 	        printw("~\n");
         i++;
     }
+	move(data.cursorPos.y, data.cursorPos.x);
     return 0;
 }
 
 char getInput(){
     int c = getch();
-    if (c == 'q')
-        _CLOSE_WINDOW = 1;
+	switch (data.mode) {
+		case CONTROL_MODE:
+			handleControlInput(c);
+			break ;
+		case EDIT_MODE:
+			handleEditInput(c);
+			break ;
+	}
     return 0;
 }
 
