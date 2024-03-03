@@ -1,6 +1,6 @@
 >> what's I'll do
 
 1 - display an empty outPut; [DONE]
-2 - read file Content; [Almost]
-4 - save and quit;
+2 - read file Content; [DONE] [NEED-TESTING]
+4 - save and quit; [DONE]
 3 - add input;

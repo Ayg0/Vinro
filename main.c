@@ -4,37 +4,11 @@
 #include <stdio.h>
 #include <string.h>
 
-unsigned char _CLOSE_WINDOW = 0;
+uint8_t		_CLOSE_WINDOW = 0; 	// toClose the ncurses Loop
+uint8_t		_DONT_IGNORE = 0; 	// flag to not ignore the last word when init the line
 vinroData	data;
 buffer		textBuffer;
 FILE		*file;
-
-uint32_t mystrlen(char *line, uint8_t *hadNewLine){
-	uint32_t i = 0;
-
-	while (line[i]) {
-		if (line[i] == '\r' || line[i] == '\n')
-			*hadNewLine = 1;
-		i++;
-	}
-	return i;
-}
-
-void loadData(char *fileName){
-	char line[data.maxWidth];
-	uint8_t hadNewLine = 0;
-	int i = 0;
-
-	file = fopen(fileName, "a+");
-	if (!file)
-		displayError("File \?\?!");
-	rewind(file);
-	while (fgets(line, sizeof(line), file) != NULL) {
-        appendRow(line, mystrlen(line, &hadNewLine), i);
-		textBuffer.lines[i].hadNewLine = hadNewLine;
-		i++;
-    }
-}
 
 void initTextBuffer(){
 	textBuffer.nbRows = 0;
@@ -89,7 +63,7 @@ char getInput(){
 
 int main(int ac, char **av){
 	setenv("TERM","xterm-256color", 1);
-	if (ac != 2)
+	if (ac != 3)
 		displayError("didn't specify fileName");
     initVinro();
 	loadData(av[1]);
@@ -99,6 +73,7 @@ int main(int ac, char **av){
         getInput();
     }
     destructVinro();
+	saveData(av[2]);
 	printf("number of Rows:%d\n", textBuffer.nbRows);
 	printf("Used Rows:%d\n", textBuffer.usedRows);
     return 0;

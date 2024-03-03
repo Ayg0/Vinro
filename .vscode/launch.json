@@ -7,7 +7,7 @@
       "name": "Launch",
       "program": "${workspaceFolder}/vinro",
       "args": [
-        "a"
+        "a", "b"
       ],
       "cwd": "${workspaceFolder}"
     },

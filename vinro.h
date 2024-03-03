@@ -10,9 +10,9 @@
 #include <sys/types.h>
 
 
-enum ControlMods{
-	EditMode,
-	ControlMode,
+enum MODS{
+	EDIT_MODE,
+	CONTROL_MODE,
 };
 
 typedef struct _vinroData{
@@ -29,7 +29,7 @@ typedef struct _position{
 typedef struct _line{
 	uint32_t		size;
 	uint8_t			hadNewLine;
-	int8_t			*line;
+	char			*line;
 	struct _line	*prev;
 	struct _line	*next;
 } lineData;
@@ -42,7 +42,14 @@ typedef struct _buffer {
 	lineData	*end;
 } buffer;
 
-void displayError(char *err);
-uint8_t appendRow(char *line, uint32_t lineSize, uint32_t atRow);
+void 	displayError(char *err);
+uint8_t appendRow(char *line, uint32_t lineSize, uint32_t atRow, uint8_t hadNewLine);
+void 	loadData(char *fileName);
+void 	saveData(char *filePath);
 
+
+extern FILE *file;
+extern vinroData data;
+extern buffer textBuffer;
+extern uint8_t _DONT_IGNORE;
 #endif
