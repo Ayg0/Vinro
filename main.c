@@ -15,6 +15,7 @@ uint32_t mystrlen(char *line, uint8_t *hadNewLine){
 	while (line[i]) {
 		if (line[i] == '\r' || line[i] == '\n')
 			*hadNewLine = 1;
+		i++;
 	}
 	return i;
 }
@@ -22,12 +23,12 @@ uint32_t mystrlen(char *line, uint8_t *hadNewLine){
 void loadData(char *fileName){
 	char line[data.maxWidth];
 	uint8_t hadNewLine = 0;
+	int i = 0;
 
 	file = fopen(fileName, "a+");
 	if (!file)
 		displayError("File \?\?!");
 	rewind(file);
-	int i = 0;
 	while (fgets(line, sizeof(line), file) != NULL) {
         appendRow(line, mystrlen(line, &hadNewLine), i);
 		textBuffer.lines[i].hadNewLine = hadNewLine;
@@ -41,6 +42,7 @@ void initTextBuffer(){
 	textBuffer.cursorPos.x = 0;
 	textBuffer.cursorPos.y = 0;
 	textBuffer.lines = NULL;
+	textBuffer.end = NULL;
 }
 
 void initVinro(){
@@ -65,9 +67,12 @@ void displayError(char *err){
 
 char outputBuffer(){
     uint32_t i = 0;
+	lineData *tmp = textBuffer.lines;
     while (i < data.maxHeight) {
-		if (i < textBuffer.usedRows)
-			printw("%s", textBuffer.lines[i].line);
+		if (i < textBuffer.usedRows){
+			printw("%s%c", tmp->line, !tmp->hadNewLine * '\n');
+			tmp = tmp->next;
+		}
 		else
 	        printw("~\n");
         i++;
@@ -83,6 +88,7 @@ char getInput(){
 }
 
 int main(int ac, char **av){
+	setenv("TERM","xterm-256color", 1);
 	if (ac != 2)
 		displayError("didn't specify fileName");
     initVinro();

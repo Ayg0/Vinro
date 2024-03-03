@@ -27,16 +27,19 @@ typedef struct _position{
 } position;
 
 typedef struct _line{
-	uint32_t	size;
-	uint8_t		hadNewLine;
-	int8_t		*line;
+	uint32_t		size;
+	uint8_t			hadNewLine;
+	int8_t			*line;
+	struct _line	*prev;
+	struct _line	*next;
 } lineData;
 
 typedef struct _buffer {
-    lineData		*lines;
+    lineData	*lines;
 	uint32_t	usedRows;
 	uint32_t	nbRows;
-	position cursorPos;
+	position	cursorPos;
+	lineData	*end;
 } buffer;
 
 void displayError(char *err);
