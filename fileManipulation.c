@@ -8,8 +8,10 @@ uint32_t mystrlen(char *line, uint8_t *hadNewLine){
 	uint32_t i = 0;
 
 	while (line[i]) {
-		if (line[i] == '\r' || line[i] == '\n')
+		if (line[i] == '\r' || line[i] == '\n'){
+			line[i] = 0;
 			*hadNewLine = 1;
+		}
 		i++;
 	}
 	if (feof(file))
@@ -22,6 +24,7 @@ void loadData(char *fileName){
 	uint8_t hadNewLine;
 	uint32_t i = 0, lineSize = 0;
 
+	line[0] = '\0';
 	file = fopen(fileName, "a+");
 	if (!file)
 		displayError("File \?\?!");
@@ -32,20 +35,20 @@ void loadData(char *fileName){
         appendRow(line, lineSize, i, hadNewLine);
 		i++;
     }
+	if (textBuffer.lines == NULL)
+		appendRow(line, 1, 0, 0);
+	currentLine = textBuffer.lines;
 }
 
 void saveData(char *filePath){
-	uint32_t i = 0;
 	lineData *tmp = textBuffer.lines;
 
 	FILE *wow = fopen(filePath, "w+");
-    while (i < data.maxHeight) {
-		if (i < textBuffer.usedRows){
-			fprintf(wow, "%s", tmp->line);
-			tmp = tmp->next;
-		}
-		else
-	        printw("~\n");
-        i++;
+    while (tmp) {
+		fprintf(wow, "%s", tmp->line);
+		if (tmp->hadNewLine)
+			fprintf(wow, "\n");
+		tmp = tmp->next;
     }
+	fclose(wow);
 }

@@ -27,7 +27,10 @@ void	handleEditInput(int c){
 		case KEY_BACKSPACE:
 			deleteCharacter();
 			break;
+		case '\n':
+			enter();
+			break;
 		default:
-			insertCharacter(c);
+			insertCharacter(currentLine, c, data.cursorPos.x, data.cursorPos.y);
 	}	
 }

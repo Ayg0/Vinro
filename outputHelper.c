@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
 extern vinroData 	data;
 extern buffer 		textBuffer;
 
@@ -21,7 +22,7 @@ lineData *getRow(uint32_t index){
 }
 
 lineData *addRows(uint32_t atIndex){
-	lineData *line = malloc(sizeof(lineData));
+	lineData *line = calloc(1, sizeof(lineData));
 	if (!line)
 		displayError("Allocation Failed");
 

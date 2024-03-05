@@ -9,6 +9,7 @@ uint8_t		_DONT_IGNORE = 0; 	// flag to not ignore the last word when init the li
 vinroData	data;
 buffer		textBuffer;
 FILE		*file;
+lineData	*currentLine = NULL;
 
 void initTextBuffer(){
 	textBuffer.nbRows = 0;
@@ -43,14 +44,15 @@ void displayError(char *err){
 char outputBuffer(){
     uint32_t i = 0;
 	lineData *tmp = textBuffer.lines;
-	move(0, 0);
+	clear();
     while (i < data.maxHeight) {
+		move(i, 0);
 		if (i < textBuffer.usedRows){
-			printw("%s%c", tmp->line, !tmp->hadNewLine * '\n');
+			printw("%s", tmp->line);
 			tmp = tmp->next;
 		}
 		else
-	        printw("~\n");
+	        printw("~");
         i++;
     }
 	move(data.cursorPos.y, data.cursorPos.x);
@@ -85,5 +87,10 @@ int main(int ac, char **av){
 	saveData(av[2]);
 	printf("number of Rows:%d\n", textBuffer.nbRows);
 	printf("Used Rows:%d\n", textBuffer.usedRows);
+	lineData *tmp = textBuffer.lines;
+	while (tmp) {
+		printf("%d, %d, %s", tmp->size, tmp->hadNewLine, tmp->line);
+		tmp = tmp->next;
+	}
     return 0;
 }
