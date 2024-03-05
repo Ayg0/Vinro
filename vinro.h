@@ -21,8 +21,8 @@ typedef struct _position{
 } position;
 
 typedef struct _vinroData{
-    int32_t	maxWidth;
-    int32_t	maxHeight;
+    uint32_t	maxWidth;
+    uint32_t	maxHeight;
     uint8_t		mode;
 	position	cursorPos;
 } vinroData;
@@ -55,12 +55,11 @@ void	handleControlInput(int c);
 lineData *getRow(uint32_t index);
 
 // line Manipulation:
-void	insertCharacter(lineData *thisLine, int c, uint32_t x, int y);
+void	insertCharacter(lineData *thisLine, int c, uint32_t x, int y, uint8_t updateFlag);
 void	deleteCharacter();
 void	enter();
 // cursor Manipulation:
-void moveCursor(int32_t x, int32_t y);
-
+void moveCursor(uint32_t x, uint32_t y);
 
 extern FILE			*file;
 extern vinroData	data;

@@ -5,9 +5,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-void	insertCharacter(lineData *thisLine, int c, uint32_t x, int y){
+void	insertCharacter(lineData *thisLine, int c, uint32_t x, int y, uint8_t updateFlag){
 
-	if (thisLine->size == (uint32_t)data.maxWidth){
+	if (thisLine->size == (uint32_t)data.maxWidth - 1){
 		if (thisLine->hadNewLine){
 			thisLine->hadNewLine = 0;
 			char *line = calloc(data.maxWidth, sizeof(char));
@@ -15,22 +15,23 @@ void	insertCharacter(lineData *thisLine, int c, uint32_t x, int y){
 			appendRow(line, 1, data.cursorPos.y + 1, 1);
 			free(line);
 		}
-		else
-			return insertCharacter(thisLine->next, c, 0, -1);
+		else{
+			if (!thisLine->next)
+				appendRow("", 0, y + 1, 0);
+			return insertCharacter(thisLine->next, thisLine->line[thisLine->size - 1], 0, y + 1, 1);
+		}
 	}
 	for (uint32_t i = thisLine->size; i > x; i--)
 		thisLine->line[i] = thisLine->line[i - 1];
-	thisLine->line[data.cursorPos.x] = c;
+	thisLine->line[x] = c;
 	thisLine->size++;
-	if (y == -1)
-		return ;
-	moveCursor(data.cursorPos.x + 1, data.cursorPos.y);
+	if (updateFlag)
+		moveCursor(data.cursorPos.x + 1, data.cursorPos.y);
 }
 
 void enter(){
-	if (!currentLine->next)
-		appendRow("", 0, data.cursorPos.y + 1, 0);
 	currentLine->hadNewLine = 1;
+	appendRow("", 0, data.cursorPos.y + 1, 1);
 	moveCursor(0, data.cursorPos.y + 1);
 }
 

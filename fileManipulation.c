@@ -7,12 +7,14 @@
 uint32_t mystrlen(char *line, uint8_t *hadNewLine){
 	uint32_t i = 0;
 
-	while (line[i]) {
-		if (line[i] == '\r' || line[i] == '\n'){
-			line[i] = 0;
+	while (*line) {
+		if (*line == '\r' || *line == '\n'){
+			*line = 0;
 			*hadNewLine = 1;
 		}
-		i++;
+		else
+			i++;
+		line++;
 	}
 	if (feof(file))
 		_DONT_IGNORE = 1;
@@ -36,7 +38,7 @@ void loadData(char *fileName){
 		i++;
     }
 	if (textBuffer.lines == NULL)
-		appendRow(line, 1, 0, 0);
+		appendRow(line, 0, 0, 0);
 	currentLine = textBuffer.lines;
 }
 

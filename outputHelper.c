@@ -28,7 +28,9 @@ lineData *addRows(uint32_t atIndex){
 
 	if (atIndex != 0){
 		line->prev = getRow(atIndex - 1);
+		lineData *tmp = line->prev->next;
 		line->prev->next = line;
+		line->next = tmp;
 	}
 	else
 	 	textBuffer.lines = line;
