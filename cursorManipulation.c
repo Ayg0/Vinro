@@ -1,6 +1,7 @@
 #include "vinro.h"
 #include <ncurses.h>
 #include <stdint.h>
+#include <stdio.h>
 
 void moveCursor(int32_t x, int32_t y){
 	if ((uint32_t)x == data.maxWidth)

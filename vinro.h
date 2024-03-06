@@ -20,11 +20,18 @@ typedef struct _position{
 	uint32_t y;
 } position;
 
+typedef struct _attributes{
+	uint8_t	tabSize;
+} attributes;
+
+
 typedef struct _vinroData{
     uint32_t	maxWidth;
     uint32_t	maxHeight;
+	attributes	attr;
     uint8_t		mode;
 	position	cursorPos;
+	char 		*infoBuffer;
 } vinroData;
 
 
@@ -49,8 +56,6 @@ void 	displayError(char *err);
 uint8_t appendRow(char *line, uint32_t lineSize, uint32_t atRow, uint8_t hadNewLine);
 void 	loadData(char *fileName);
 void 	saveData(char *filePath);
-void	handleEditInput(int c);
-void	handleControlInput(int c);
 
 lineData *getRow(uint32_t index);
 
@@ -62,6 +67,10 @@ void	enter();
 void moveCursor(int32_t x, int32_t y);
 // string Manipulation:
 void splitString(lineData *line, lineData *next, int32_t index);
+// input Helper:
+void 	updateInfoBuffer();
+void	handleEditInput(int c);
+void	handleControlInput(int c);
 
 extern FILE			*file;
 extern vinroData	data;

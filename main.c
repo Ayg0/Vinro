@@ -2,6 +2,7 @@
 #include <ncurses.h>
 #include <stdint.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 uint8_t		_CLOSE_WINDOW = 0; 	// toClose the ncurses Loop
@@ -22,12 +23,18 @@ void initVinro(){
     initscr();
 	initTextBuffer();
     raw();
-    keypad(stdscr, TRUE);
 	noecho();
+	cbreak();
+    keypad(stdscr, TRUE);
 	data.cursorPos.y = 0;
 	data.cursorPos.x = 0;
 	data.mode = CONTROL_MODE;
+	data.attr.tabSize = 2;
     getmaxyx(stdscr, data.maxHeight, data.maxWidth);
+	data.maxHeight--;
+	data.infoBuffer = calloc(data.maxWidth, sizeof(char));
+	if (!data.infoBuffer)
+		displayError("Allocation Faild");
 }
 
 void destructVinro(){
@@ -55,12 +62,16 @@ char outputBuffer(){
 	        printw("~");
         i++;
     }
+	mvprintw(i, 0, "%s", data.infoBuffer);
 	move(data.cursorPos.y, data.cursorPos.x);
     return 0;
 }
 
 char getInput(){
     int c = getch();
+
+	if (c == ERR)
+		return 0;
 	switch (data.mode) {
 		case CONTROL_MODE:
 			handleControlInput(c);
@@ -69,19 +80,21 @@ char getInput(){
 			handleEditInput(c);
 			break ;
 	}
-    return 0;
+    return 1;
 }
 
 int main(int ac, char **av){
 	setenv("TERM","xterm-256color", 1);
+	setenv("ESCDELAY", "1", 1);
 	if (ac != 3)
 		displayError("didn't specify fileName");
     initVinro();
 	loadData(av[1]);
     while (!_CLOSE_WINDOW) {
         refresh();
+		updateInfoBuffer();
         outputBuffer();
-        getInput();
+        while(!getInput());
     }
     destructVinro();
 	saveData(av[2]);
