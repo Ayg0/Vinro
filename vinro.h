@@ -55,11 +55,13 @@ void	handleControlInput(int c);
 lineData *getRow(uint32_t index);
 
 // line Manipulation:
-void	insertCharacter(lineData *thisLine, int c, uint32_t x, int y, uint8_t updateFlag);
+void	insertCharacter(lineData *thisLine, char c, int32_t x, int32_t y);
 void	deleteCharacter();
 void	enter();
 // cursor Manipulation:
-void moveCursor(uint32_t x, uint32_t y);
+void moveCursor(int32_t x, int32_t y);
+// string Manipulation:
+void splitString(lineData *line, lineData *next, int32_t index);
 
 extern FILE			*file;
 extern vinroData	data;

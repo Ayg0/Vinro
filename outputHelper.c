@@ -65,7 +65,6 @@ uint8_t 	copyline(lineData *to, char const *from, uint32_t len, uint8_t hadNewLi
 		i++, j++;
 	}
 	line[i] = 0;
-
 	return 0;
 }
 

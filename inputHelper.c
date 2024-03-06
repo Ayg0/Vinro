@@ -49,6 +49,6 @@ void	handleEditInput(int c){
 		default:
 			if (c == '\t')
 				c = ' ';
-			insertCharacter(currentLine, c, data.cursorPos.x, data.cursorPos.y, 1);
+			insertCharacter(currentLine, c, data.cursorPos.x, data.cursorPos.y);
 	}	
 }
