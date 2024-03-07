@@ -3,7 +3,24 @@
 #include <stdint.h>
 #include <stdio.h>
 
-void moveCursor(int32_t x, int32_t y){
+int32_t	textScroll(uint8_t up){
+	int32_t y = 0;
+	if (up && textBuffer.start->prev){
+		textBuffer.startRowIndex--;
+		textBuffer.start = textBuffer.start->prev;
+	}
+	else if (!up && textBuffer.start->next){
+		textBuffer.start = textBuffer.start->next;
+		textBuffer.startRowIndex++;
+		y = data.maxHeight - 1;
+	}
+	return y;
+}
+
+void	moveCursor(int32_t x, int32_t y){
+
+	if (y == -1 || y == (int32_t)data.maxHeight - 1)
+		y = textScroll(y == -1);
 	if ((uint32_t)x == data.maxWidth)
 		x = 0, y += 1;
 	if ((uint32_t)y >= textBuffer.nbRows || x < 0)

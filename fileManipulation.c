@@ -40,6 +40,7 @@ void loadData(char *fileName){
 	if (textBuffer.lines == NULL)
 		appendRow(line, 0, 0, 0);
 	currentLine = textBuffer.lines;
+	textBuffer.start = textBuffer.lines;
 }
 
 void saveData(char *filePath){

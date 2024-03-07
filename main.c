@@ -14,6 +14,7 @@ lineData	*currentLine = NULL;
 
 void initTextBuffer(){
 	textBuffer.nbRows = 0;
+	textBuffer.startRowIndex = 0;
 	textBuffer.lines = NULL;
 	textBuffer.end = NULL;
 }
@@ -50,7 +51,7 @@ void displayError(char *err){
 
 char outputBuffer(){
     uint32_t i = 0;
-	lineData *tmp = textBuffer.lines;
+	lineData *tmp = textBuffer.start;
 	clear();
     while (i < data.maxHeight) {
 		move(i, 0);
@@ -62,7 +63,7 @@ char outputBuffer(){
 	        printw("~");
         i++;
     }
-	mvprintw(i, 0, "%s", data.infoBuffer);
+	mvprintw(data.maxHeight, 0, "%s", data.infoBuffer);
 	move(data.cursorPos.y, data.cursorPos.x);
     return 0;
 }

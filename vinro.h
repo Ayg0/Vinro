@@ -47,7 +47,9 @@ typedef struct _line{
 
 typedef struct _buffer {
     lineData	*lines;
+	uint32_t	startRowIndex;
 	uint32_t	nbRows;
+	lineData	*start;
 	lineData	*end;
 } buffer;
 
