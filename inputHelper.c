@@ -6,7 +6,7 @@
 void	handleControlInput(int c){
 	switch (c) {
 		case 'q':
-			_CLOSE_WINDOW = 1;
+			_CLOSE_WINDOW = 1, SET_FIELD(data.attr.fileOptions, SAVE_EXIT);
 			break;
 		case KEY_UP:
 			moveCursor(data.cursorPos.x, data.cursorPos.y - 1);
@@ -23,6 +23,8 @@ void	handleControlInput(int c){
 		case 'e':
 			data.mode = EDIT_MODE;
 			break;
+		case ':':
+			getFullCommand();
 		default:
 			break;
 	}

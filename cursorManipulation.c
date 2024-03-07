@@ -6,7 +6,7 @@
 void moveCursor(int32_t x, int32_t y){
 	if ((uint32_t)x == data.maxWidth)
 		x = 0, y += 1;
-	if ((uint32_t)y >= textBuffer.usedRows || x < 0)
+	if ((uint32_t)y >= textBuffer.nbRows || x < 0)
 		return ;
 	data.cursorPos.x = x;
 	if (data.cursorPos.y != (uint32_t)y){

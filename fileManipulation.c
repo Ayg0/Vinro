@@ -45,12 +45,14 @@ void loadData(char *fileName){
 void saveData(char *filePath){
 	lineData *tmp = textBuffer.lines;
 
-	FILE *wow = fopen(filePath, "w+");
+	if (!IS_SET(data.attr.fileOptions, SAVE_EXIT))
+		return ;
+	FILE *toSaveIn = fopen(filePath, "w+");
     while (tmp) {
-		fprintf(wow, "%s", tmp->line);
+		fprintf(toSaveIn, "%s", tmp->line);
 		if (tmp->hadNewLine)
-			fprintf(wow, "\n");
+			fprintf(toSaveIn, "\n");
 		tmp = tmp->next;
     }
-	fclose(wow);
+	fclose(toSaveIn);
 }

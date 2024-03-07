@@ -5,7 +5,8 @@ CC = gcc
 CFLAGS= -Werror -Wall -Wextra -g -lcurses
 
 SRCS = main.c outputHelper.c inputHelper.c fileManipulation.c\
-		lineManipulation.c cursorManipulation.c stringUtils.c
+		lineManipulation.c cursorManipulation.c stringUtils.c\
+		commands.c
 
 OBJS = ${SRCS:.c=.o}
 

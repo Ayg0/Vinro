@@ -14,7 +14,6 @@ lineData	*currentLine = NULL;
 
 void initTextBuffer(){
 	textBuffer.nbRows = 0;
-	textBuffer.usedRows = 0;
 	textBuffer.lines = NULL;
 	textBuffer.end = NULL;
 }
@@ -30,6 +29,7 @@ void initVinro(){
 	data.cursorPos.x = 0;
 	data.mode = CONTROL_MODE;
 	data.attr.tabSize = 2;
+	data.attr.fileOptions = 0;
     getmaxyx(stdscr, data.maxHeight, data.maxWidth);
 	data.maxHeight--;
 	data.infoBuffer = calloc(data.maxWidth, sizeof(char));
@@ -54,7 +54,7 @@ char outputBuffer(){
 	clear();
     while (i < data.maxHeight) {
 		move(i, 0);
-		if (i < textBuffer.usedRows){
+		if (i < textBuffer.nbRows){
 			printw("%s", tmp->line);
 			tmp = tmp->next;
 		}
@@ -98,12 +98,12 @@ int main(int ac, char **av){
     }
     destructVinro();
 	saveData(av[2]);
-	printf("number of Rows:%d\n", textBuffer.nbRows);
-	printf("Used Rows:%d\n", textBuffer.usedRows);
-	lineData *tmp = textBuffer.lines;
-	while (tmp) {
-		printf("%d, %d, %s", tmp->size, tmp->hadNewLine, tmp->line);
-		tmp = tmp->next;
-	}
+	//printf("number of Rows:%d\n", textBuffer.nbRows);
+	//printf("Used Rows:%d\n", textBuffer.usedRows);
+	//lineData *tmp = textBuffer.lines;
+	//while (tmp) {
+	//	printf("%d, %d, %s", tmp->size, tmp->hadNewLine, tmp->line);
+	//	tmp = tmp->next;
+	//}
     return 0;
 }

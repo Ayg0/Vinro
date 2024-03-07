@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <sys/types.h>
+#include "macros.h"
 
 
 enum MODS{
@@ -21,6 +22,7 @@ typedef struct _position{
 } position;
 
 typedef struct _attributes{
+	uint8_t	fileOptions;
 	uint8_t	tabSize;
 } attributes;
 
@@ -45,12 +47,9 @@ typedef struct _line{
 
 typedef struct _buffer {
     lineData	*lines;
-	uint32_t	usedRows;
 	uint32_t	nbRows;
 	lineData	*end;
 } buffer;
-
-#define KEY_ESC 27
 
 void 	displayError(char *err);
 uint8_t appendRow(char *line, uint32_t lineSize, uint32_t atRow, uint8_t hadNewLine);
@@ -63,6 +62,7 @@ lineData *getRow(uint32_t index);
 void	insertCharacter(lineData *thisLine, char c, int32_t x, int32_t y);
 void	deleteCharacter();
 void	enter();
+void	clearLine(int32_t index);
 // cursor Manipulation:
 void moveCursor(int32_t x, int32_t y);
 // string Manipulation:
@@ -71,6 +71,8 @@ void splitString(lineData *line, lineData *next, int32_t index);
 void 	updateInfoBuffer();
 void	handleEditInput(int c);
 void	handleControlInput(int c);
+// commands:
+void	getFullCommand();
 
 extern FILE			*file;
 extern vinroData	data;

@@ -78,6 +78,5 @@ uint8_t appendRow(char *line, uint32_t lineSize, uint32_t atRow, uint8_t hadNewL
 	linePtr->size = lineSize;
 	copyline(linePtr, line, lineSize, hadNewLine);
 	linePtr->hadNewLine = hadNewLine;
-	textBuffer.usedRows++;
 	return 0;
 }
