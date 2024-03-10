@@ -55,7 +55,7 @@ char outputBuffer(){
 	clear();
     while (i < data.maxHeight) {
 		move(i, 0);
-		if (i < textBuffer.nbRows){
+		if (tmp){
 			printw("%s", tmp->line);
 			tmp = tmp->next;
 		}

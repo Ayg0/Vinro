@@ -49,7 +49,7 @@ void splitLine(lineData *originline, lineData *next, int32_t index){
 
 void enter(){
 	currentLine->hadNewLine = 1;
-	appendRow("", 0, data.cursorPos.y + 1, 1);
+	appendRow("", 0, data.cursorPos.y + 1, 0);
 	splitLine(currentLine, currentLine->next, data.cursorPos.x);
 	moveCursor(0, data.cursorPos.y + 1);
 }
@@ -61,6 +61,7 @@ void removeLine(lineData *line){
 		textBuffer.lines = line->next;
 	if (line->next)
 		line->next->prev = line->prev;
+	currentLine = line->prev;
 	free(line->line);
 	free(line);
 	textBuffer.nbRows--;

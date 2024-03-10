@@ -65,5 +65,5 @@ void	handleEditInput(int c){
 void updateInfoBuffer(){
 	char *modes[] = {"  EDIT  ", " CONTROL"};
 	sprintf(data.infoBuffer, "-- %s MODE  --    C:%d, R:%d", modes[data.mode],
-			data.cursorPos.x, data.cursorPos.y);
+			data.cursorPos.x, data.cursorPos.y + textBuffer.startRowIndex);
 }
