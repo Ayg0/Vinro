@@ -40,7 +40,8 @@ void initVinro(){
 
 void destructVinro(){
     endwin();
-	fclose(file);
+	if (file != NULL)
+		fclose(file);
 }
 
 void displayError(char *err){
@@ -87,9 +88,10 @@ char getInput(){
 int main(int ac, char **av){
 	setenv("TERM","xterm-256color", 1);
 	setenv("ESCDELAY", "1", 1);
-	if (ac != 3)
+	if (ac < 1)
 		displayError("didn't specify fileName");
     initVinro();
+	data.fileToSave = av[1];
 	loadData(av[1]);
     while (!_CLOSE_WINDOW) {
         refresh();
@@ -98,7 +100,7 @@ int main(int ac, char **av){
         while(!getInput());
     }
     destructVinro();
-	saveData(av[2]);
+	saveData(data.fileToSave);
 	//printf("number of Rows:%d\n", textBuffer.nbRows);
 	//printf("Used Rows:%d\n", textBuffer.usedRows);
 	//lineData *tmp = textBuffer.lines;

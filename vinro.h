@@ -34,6 +34,7 @@ typedef struct _vinroData{
     uint8_t		mode;
 	position	cursorPos;
 	char 		*infoBuffer;
+	char		*fileToSave;
 } vinroData;
 
 
